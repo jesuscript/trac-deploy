@@ -1,0 +1,7 @@
+ansible_ssh_user: root
+
+base_dir: "{{ ansible_env.HOME }}"
+
+authorized_key: ./group_vars/sshkeys/key.pub
+ssh_pub_key: ./group_vars/sshkeys/key.pub
+ansible_ssh_private_key_file: ./group_vars/sshkeys/key

@@ -1,0 +1,27 @@
+- hosts: all
+  gather_facts: no
+  tags: dependency
+  tasks:
+    - name: wait for port 22 to be ready
+      sudo: no
+      local_action: wait_for port=22 host="{{ inventory_hostname }}"  
+    - name: install python
+      sudo: yes
+      raw: apt-get install -y python
+      
+- hosts: flu
+  tags: flu
+  roles:
+    - { role: charlie-flu,
+        node_host_name: flu,
+        preload_address: "{{gateway_eth_address}}"}
+
+- hosts: trac-gateway
+  pre_tasks:
+    - name: add nodejs PPA
+      shell: curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash -
+
+    - name: install nodejs
+      apt: state=present update_cache=yes pkg=nodejs
+  roles:
+    - { role: gateway, tags: "gateway" }

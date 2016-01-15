@@ -1,0 +1,31 @@
+- name: clone git repository
+  git: repo={{ gateway_repo }} dest={{install_dir}} force=yes
+  tags: update
+
+- name: install clang
+  apt: state=present pkg=clang
+  
+- name: npm install locals
+  shell: CXX=clang++ npm install  chdir={{install_dir}}
+  tags: update
+
+- name: deploy antifraud contract
+  shell: RPC_ADDR="http://localhost:8545" PRIV_KEY={{ gateway_eth_private_key }} ./bin/deploy_contract antifraud chdir="{{ install_dir }}"
+  register: gateway_antifraud_contract_address
+
+- name: install pm2
+  sudo: yes
+  npm: name=pm2 global=yes
+  
+- name: copy the pm2 config
+  template: src=pm2.json dest="{{pm2_config_path}}"
+  tags: update
+
+- name: start or restart pm2
+  shell: pm2 startOrRestart "{{pm2_config_path}}"
+  tags: update
+
+- name: open port for serving
+  ufw: rule=allow port="{{gateway_serve_port}}" proto=tcp
+  notify: reload ufw
+  

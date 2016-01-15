@@ -1,0 +1,5 @@
+module_name: trac-gateway
+gateway_repo: "https://github.com/jesuscript/{{ module_name }}.git"
+install_dir: "{{ base_dir }}/{{ module_name }}"
+pm2_config_path: "{{ base_dir }}/{{ module_name }}.json"
+gateway_serve_port: 3000

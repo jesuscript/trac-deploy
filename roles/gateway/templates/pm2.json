@@ -1,0 +1,15 @@
+{
+  "apps": [{
+    "name": "trac-gateway",
+    "script": "app.js",
+    "port": "{{ gateway_serve_port }}",
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+    "watch": false,
+    "cwd": "{{ module_name }}",
+    "env": {
+      "PRIV_KEY": "{{ gateway_eth_private_key }}",
+      "RPC_ADDR": "http://localhost:8545",
+      "ANTIFRAUD_ADDR": "{{gateway_antifraud_contract_address.stdout}}"
+    }
+  }]
+}
