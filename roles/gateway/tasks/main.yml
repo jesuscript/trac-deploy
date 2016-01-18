@@ -2,11 +2,11 @@
   git: repo={{ gateway_repo }} dest={{install_dir}} force=yes
   tags: update
 
-- name: install clang
-  apt: state=present pkg=clang
+# - name: install clang
+#   apt: state=present pkg=clang
   
 - name: npm install locals
-  shell: CXX=clang++ npm install  chdir={{install_dir}}
+  shell: npm install chdir={{install_dir}}
   tags: update
 
 - name: deploy antifraud contract
